@@ -21,6 +21,10 @@ public class UrlMapping {
     public UrlMapping(String shortCode, String longUrl) {
         this.shortCode = shortCode;
         this.longUrl = longUrl;
+        this.createdAt = LocalDateTime.now();
+    }
+    public UrlMapping() {
+        this.createdAt = LocalDateTime.now(); // <--- THIS LINE SETS IT
     }
 
     public Long getId() {

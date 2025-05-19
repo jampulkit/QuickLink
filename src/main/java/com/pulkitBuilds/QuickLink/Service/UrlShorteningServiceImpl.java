@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 @Service
@@ -33,10 +34,11 @@ public class UrlShorteningServiceImpl implements UrlShorteningService {
         }while (urlMappingRepository.existsByShortCode(shortCode));
         UrlMapping newMapping = new UrlMapping(shortCode, longUrl);
         UrlMapping saveMapping = urlMappingRepository.save(newMapping);
+        String shortUrl = saveMapping.getShortCode();
+        saveMapping.setCreatedAt(LocalDateTime.now());
 
-        String fullUrl = "http://localhost:8080/" + saveMapping.getShortCode();
+        return new ShortenUrlResponseDto(shortUrl, longUrl);
 
-        return new ShortenUrlResponseDto(fullUrl, saveMapping.getLongUrl());
     }
 
     private String generateRandomShortCode(String longUrl) {
