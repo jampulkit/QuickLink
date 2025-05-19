@@ -18,10 +18,9 @@ public class UrlMapping {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public UrlMapping(String shortCode, String longUrl, LocalDateTime createdAt) {
+    public UrlMapping(String shortCode, String longUrl) {
         this.shortCode = shortCode;
         this.longUrl = longUrl;
-        this.createdAt = createdAt;
     }
 
     public Long getId() {
