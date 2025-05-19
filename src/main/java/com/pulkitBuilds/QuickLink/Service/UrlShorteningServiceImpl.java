@@ -49,6 +49,7 @@ public class UrlShorteningServiceImpl implements UrlShorteningService {
 
     @Override
     public String getLondUrlFromShortcode(String shortCode) {
-        return "";
+        urlMappingRepository.findByShortCode(shortCode);
+        return urlMappingRepository.findByShortCode(shortCode).getLongUrl();
     }
 }
