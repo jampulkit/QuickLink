@@ -6,6 +6,8 @@ import com.pulkitBuilds.QuickLink.Entity.UrlMapping;
 import com.pulkitBuilds.QuickLink.Repo.UrlMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.pulkitBuilds.QuickLink.exception.ShortCodeNotFoundException;
+
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -51,7 +53,8 @@ public class UrlShorteningServiceImpl implements UrlShorteningService {
 
     @Override
     public String getLondUrlFromShortcode(String shortCode) {
-        urlMappingRepository.findByShortCode(shortCode);
-        return urlMappingRepository.findByShortCode(shortCode).getLongUrl();
+
+        return urlMappingRepository.findByShortCode(shortCode).map(UrlMapping::getLongUrl).orElseThrow(() ->
+             new ShortCodeNotFoundException("Short code not found: " + shortCode));
     }
 }

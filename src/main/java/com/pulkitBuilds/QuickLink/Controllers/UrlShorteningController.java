@@ -4,6 +4,7 @@ import com.pulkitBuilds.QuickLink.Dto.ShortenUrlRequestDto;
 import com.pulkitBuilds.QuickLink.Dto.ShortenUrlResponseDto;
 import com.pulkitBuilds.QuickLink.Service.UrlShorteningServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,9 @@ public class UrlShorteningController {
 
 
     @PostMapping("/short")
-    public ResponseEntity<ShortenUrlResponseDto> shotenUrl(@RequestBody ShortenUrlRequestDto shortenUrlRequestDto) {
+    public ResponseEntity<ShortenUrlResponseDto> shotenUrl(@Valid @RequestBody ShortenUrlRequestDto shortenUrlRequestDto) {
         ShortenUrlResponseDto response = urlShorteningService.shortenUrl(shortenUrlRequestDto);
-        String fullShortUrl = baseUrl + "/s/" + response.getShortUrl().substring(response.getShortUrl().lastIndexOf('/') + 1);
+        String fullShortUrl = baseUrl + "/api/v1/url/s/" + response.getShortUrl().substring(response.getShortUrl().lastIndexOf('/') + 1);
         response.setShortUrl(fullShortUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -37,10 +38,8 @@ public class UrlShorteningController {
     @GetMapping("/s/{shortCode}")
     public void RedirectToOriginalUrl(@PathVariable String shortCode, HttpServletResponse response) throws IOException {
         String originalUrl = urlShorteningService.getLondUrlFromShortcode(shortCode);
-        if (originalUrl != null) {
+
             response.sendRedirect(originalUrl);
-        } else {
-           response.sendError(HttpServletResponse.SC_NOT_FOUND, "Short URL not found");
-        }
+
     }
 }
